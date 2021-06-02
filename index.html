@@ -1,18 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<style>
-p {
-  text-align: center;
-  color: red;
-} 
-</style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Console</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/icons/css/all.min.css">
+    <link rel="stylesheet" href="/static/console.css">
 </head>
 <body>
+    <div class="bg-img">
+        <div class="overlay"></div>
+    </div>
+        <div class="main-heading">
+            <h1>DWEB</h1>
+        </div>
+        <div class="new-button">
+            <button   type="submit" onclick="window.location.href='{{ url_for("project") }}';"><i class="fas fa-plus">New Project</button>
+        </div>
+        <table border='5' width='100%'>
+            <tr>
+                <th>Project Name</th>
+                <th>OS</th>
+                <th>Status</th>
+                <th>Start</th>
+                <th>Stop</th>
+                <th>Terminate</th>
+                <th>Port</th>
+            </tr>
+{% for c in c_list %}
+  {% if "Up" in c %}
+    {% set cstatus = "running" %}
+    the container is running
+  {% elif "Exited" in c %}
+    {% set cstatus = "stopped" %}
+    the container is stopped
+  {% else %}
+    {% set cstatus = "unknown" %}
+    unknown status
+  {% endif %}
 
-<p>Every paragraph will be affected by the style.</p>
-<p id="para1">Me too!</p>
-<p>And me!</p>
+
+  {% set c_details  =  c.split() %}
+  {% set cname =  c_details[-1] %}
+  {% set port =  c_details[-2].split(':')[1] %}
+  {% set imagename = c_details[1] %}
+
+<tr>
+<td>{{ cname }}</td>
+<td>{{ imagename }}</td>
+<td>{{ cstatus }}</td>
+<td><a href="/start/{{ cname }}">Start</a></td>
+<td><a href="/stop/{{ cname }}">Stop</a></td>
+<td><a href="/terminate/{{ cname }}">Terminate</a></td>
+<td>{{ port }}</td>
+</tr>
+{% endfor %}
+</table>
 
 </body>
 </html>
+© 2021 GitHub, Inc.
